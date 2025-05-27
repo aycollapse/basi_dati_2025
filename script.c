@@ -90,7 +90,7 @@ int main()
             case 2:
                 char* query = "SELECT * FROM (SELECT nome_serie_tv AS serie_tv, AVG(rating_imdb) AS media_rating_episodi from episodio "
                               "inner join serie_tv on episodio.nome_serie_tv = serie_tv.nome "
-                              "inner join media on media.id_media = episodio.id_episodio GROUP by nome_serie_tv) AS tabella where media_rating_episodi >= $1::float"
+                              "inner join media on media.id_media = episodio.id_episodio GROUP BY nome_serie_tv) AS tabella where media_rating_episodi >= $1::float"
                 
                 PGresult* res = PQprepare ( conn , "serie_dato_rating" , query , 1 , NULL );
                 float rating;
@@ -168,7 +168,7 @@ int main()
                 PQclear(res);
                 break;
             case 4:
-                char* query = "SELECT nome_serie_tv, AVG(rating_imdb) from episodio inner join serie_tv on episodio.nome_serie_tv = serie_tv.nome "
+                char* query = "SELECT nome_serie_tv, count(id_episodio) AS numero_episodi from episodio inner join serie_tv on episodio.nome_serie_tv = serie_tv.nome "
                               "INNER join media on media.id_media = episodio.id_episodio GROUP by nome_serie_tv "
                               "HAVING count(id_episodio)>= $1::int"
                 
@@ -201,6 +201,60 @@ int main()
 
                 PQclear(res);
                 break;
+            case 5:
+                res = PQexec(conn,  "SELECT media.titolo, casting_media_membro.ruolo, serie_tv.nome AS nome_serie_tv FROM membro "
+                                    "INNER JOIN casting_media_membro ON membro.codice_fiscale = casting_media_membro.codice_fiscale_membro "
+                                    "INNER JOIN media ON media.id_media = casting_media_membro.id_media_casting "
+                                    "left JOIN episodio ON media.id_media = episodio.id_episodio "
+                                    "left JOIN serie_tv ON episodio.nome_serie_tv = serie_tv.nome "
+                                    "WHERE membro.codice_fiscale = 'VLNTDR81D22F205Y'");
+                checkerr(res, conn);
+                num_tuple = PQntuples(res);
+                num_attr = PQnfields(res);
+
+                for(int i = 0; i < num_attr; i++)
+                {
+                    fprintf(stdout, "%s\t", PQfname(res, i));
+                }
+                fprintf(stdout, "\n");
+
+                for(int i = 0; i < num_tuple; i++)
+                {
+                    for (int j = 0; j < num_attr; j++)
+                    {
+                        fprintf(stdout, "%s\t\t", PQgetvalue(res, i, j));
+                    }
+                    fprintf(stdout, "\n");
+                }
+                PQclear(res);
+                break;
+            case 6:
+                res = PQexec(conn,  "SELECT ruolo, count(*) as numero_volte_svolto FROM membro "
+                                    "INNER JOIN casting_media_membro ON membro.codice_fiscale = casting_media_membro.codice_fiscale_membro "
+                                    "INNER JOIN media ON media.id_media = casting_media_membro.id_media_casting "
+                                    "INNER JOIN film on media.id_media = film.id_film "
+                                    "WHERE membro.codice_fiscale = 'VLNTDR81D22F205Y' "
+                                    "GROUP BY casting_media_membro.ruolo");
+                checkerr(res, conn);
+                num_tuple = PQntuples(res);
+                num_attr = PQnfields(res);
+
+                for(int i = 0; i < num_attr; i++)
+                {
+                    fprintf(stdout, "%s\t", PQfname(res, i));
+                }
+                fprintf(stdout, "\n");
+
+                for(int i = 0; i < num_tuple; i++)
+                {
+                    for (int j = 0; j < num_attr; j++)
+                    {
+                        fprintf(stdout, "%s\t\t", PQgetvalue(res, i, j));
+                    }
+                    fprintf(stdout, "\n");
+                }
+                PQclear(res);
+                break;
             default:
                 printf("Scegliere un numero valido\n");
                 break;
@@ -222,6 +276,8 @@ void print_menu(){
     printf("2) Dato il rating restituisce le serie tv con valutazione maggiore o uguale (parametrica)\n");
     printf("3) Dato un numero di incassi restituisce i film con introiti maggiori o uguali (parametrica)\n");
     printf("4) Dato un numero di episodi restituisce le serie tv almeno quel numero episodi (parametrica)\n");
+    printf("5) Trova tutti gli episodi di serie tv e film dove ha partecipato Vittorio Delmi\n");
+    printf("6) Mostra che il numero di volte che ha eseguito un certo ruolo in un film Vittorio Delmi\n");
 }
 
 void checkerr(PGresult *res, PGconn *conn){
