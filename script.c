@@ -12,7 +12,7 @@
 
 //sostituire coi valori giusti
 #ifndef DB_NAME
-    #define DB_NAME "alex" 
+    #define DB_NAME "db_name" 
 #endif
 
 #ifndef USER
