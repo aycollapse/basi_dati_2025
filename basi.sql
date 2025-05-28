@@ -25,7 +25,7 @@ CREATE TABLE serie_tv (
     numero_stagioni INT NOT NULL,
     stato_completamento VARCHAR(31) NOT NULL,
     incassi INT,
-    premi_oscar INT
+    premi_emmy INT
 );
 
 DROP TABLE IF EXISTS film CASCADE;
@@ -115,8 +115,9 @@ INSERT INTO saga (nome, descrizione, stato_completamento) VALUES
 ('Hunger Games', 'Una saga distopica basata sulla serie di romanzi di Suzanne Collins.', 'Completata'),
 ('Il Signore degli Anelli', 'Un epico fantasy basato sul romanzo di J.R.R. Tolkien.', 'Completata');
 
-INSERT INTO serie_tv (nome, descrizione, numero_stagioni, stato_completamento, incassi, premi_oscar) VALUES
-('Chronos', 'Un thriller psicologico ambientato nel tempo.', 2, 'In corso', 1000000, 0);
+INSERT INTO serie_tv (nome, descrizione, numero_stagioni, stato_completamento, incassi, premi_emmy) VALUES
+('Chronos', 'Un thriller psicologico ambientato nel tempo.', 2, 'In corso', 1000000, 0),
+('Suits', 'Harvey Specter è uno dei più importanti avvocati di New York, cinico e spietato, con una passione per gli abiti sartoriali e la vita mondana. È appena diventato socio Senior dello studio legale presso cui lavora, Pearson Hardman, ruolo che lo obbliga, suo malgrado, ad assumere un giovane associato: Harvey odia dover lavorare in coppia, e odia ancor di più i neolaureati appena usciti da Harvard (la Pearson Hardman accetta esclusivamente coloro che si sono laureati ad Harvard). Mike Ross è invece un giovane ragazzo estremamente intelligente, dotato di una prodigiosa memoria eidetica, che non si è mai laureato in legge, anche se ha sfruttato le sue capacità per sostenere esami al posto di altri studenti illegalmente. Un incontro fortuito tra i due, con Mike che ha modo di mostrare tutta la sua competenza e inventiva in materia di legge, convince Harvey ad assumerlo nel suo studio, nascondendo a tutti il fatto che il giovane, in realtà, pur avendo superato l esame di ammissione all Albo (negli USA non esiste il valore legale del titolo di studio) non era in possesso dei requisiti minimi previsti dallo stato di New York per essere ammesso all esame (28 crediti presso una Law School e 4 anni di lavoro presso uno studio legale); da parte sua, Mike coglie al volo questa seconda occasione capitatagli inaspettatamente tra le mani, incominciando a districarsi in un ambiente altamente competitivo e cercando di dimostrare di essere all altezza, per questo posto di lavoro. ', 9, 'Terminata', 50000000, 0);
 
 INSERT INTO media (id_media, titolo, genere, durata_minuti, trama, data_rilascio, rating_imdb) VALUES
 ('FAN-20100716-INCEPTI12345','Inception','Fantascienza',148,'Un ladro entra nei sogni per rubare segreti.','2010-07-16',8.8),
@@ -131,6 +132,18 @@ INSERT INTO media (id_media, titolo, genere, durata_minuti, trama, data_rilascio
 ('THR-20220115-ANELLOC22334','Anello Chiuso','Thriller',44,'I protagonisti si trovano intrappolati.','2022-01-15',7.5),
 ('THR-20230101-LABUSSO44556','La Bussola del Tempo','Thriller',46,'Una nuova minaccia temporale emerge.','2023-01-01',7.8),
 ('THR-20230108-PARADOS66778','Paradosso','Thriller',48,'I ricordi iniziano a scomparire.','2023-01-08',7.9),
+('GIU-20120310-SUITS5566778','Avvocato per caso','Giudiziario',44,'Avvocato per caso','2012-03-10',6.7),
+('GIU-20120317-SUITS5566778','Errori ed omissioni','Giudiziario',45,'Errori ed omissioni','2012-03-17',7.1),
+('GIU-20120324-SUITS5566778','Corsia interna','Giudiziario',44,'Corsia interna','2012-03-24',7.7),
+('GIU-20120331-SUITS5566778','Loschi piccoli segreti','Giudiziario',44,'Loschi piccoli segreti','2012-03-31',7.7),
+('GIU-20120407-SUITS5566778','Libertà su cauzione','Giudiziario',49,'Libertà su cauzione','2012-04-07',7.0),
+('GIU-20120414-SUITS5566778','I trucchi del mestiere','Giudiziario',51,'I trucchi del mestiere','2012-04-14',8.1),
+('GIU-20120421-SUITS5566778','Concentrati sull uomo','Giudiziario',46,'Concentrati sull uomo','2012-04-21',8.3),
+('GIU-20120428-SUITS5566778','Crisi d identità','Giudiziario',44,'Crisi d identità','2012-04-28',7.5),
+('GIU-20120505-SUITS5566778','Imbattuto','Giudiziario',44,'Imbattuto','2012-05-05',8.0),
+('GIU-20120512-SUITS5566778','Una vita in scatola','Giudiziario',48,'Una vita in scatola','2012-05-12',7.7),
+('GIU-20120519-SUITS5566778','Le regole del gioco','Giudiziario',46,'Le regole del gioco','2012-05-19',7.1),
+('GIU-20120526-SUITS5566778','Il duello','Giudiziario',54,'Il duello','2012-05-26',7.2),
 ('THR-20230115-FINEINI88990','Fine Inizio','Thriller',50,'Il cerchio si chiude... o si apre?','2023-01-15',8.0);
 
 INSERT INTO film(id_film,data_uscita_streaming,incassi,premi_oscar,nome_saga) VALUES
@@ -148,7 +161,20 @@ INSERT INTO episodio(id_episodio,stagione,numero,nome_serie_tv) VALUES
 ('THR-20220115-ANELLOC22334',1,3,'Chronos'),
 ('THR-20230101-LABUSSO44556',2,1,'Chronos'),
 ('THR-20230108-PARADOS66778',2,2,'Chronos'),
-('THR-20230115-FINEINI88990',2,3,'Chronos');
+('THR-20230115-FINEINI88990',2,3,'Chronos'),
+('GIU-20120310-SUITS5566778',1,1,'Suits'),
+('GIU-20120317-SUITS5566778',1,2,'Suits'),
+('GIU-20120324-SUITS5566778',1,3,'Suits'),
+('GIU-20120331-SUITS5566778',1,4,'Suits'),
+('GIU-20120407-SUITS5566778',1,5,'Suits'),
+('GIU-20120414-SUITS5566778',1,6,'Suits'),
+('GIU-20120421-SUITS5566778',1,7,'Suits'),
+('GIU-20120428-SUITS5566778',1,8,'Suits'),
+('GIU-20120505-SUITS5566778',1,9,'Suits'),
+('GIU-20120512-SUITS5566778',1,10,'Suits'),
+('GIU-20120519-SUITS5566778',1,11,'Suits'),
+('GIU-20120526-SUITS5566778',1,12,'Suits');
+
 
 INSERT INTO membro (codice_fiscale, nome, cognome, nazionalita, data_nascita) VALUES
 ('RSSMRA85M12H501Z', 'Maria', 'Rossi', 'Italiana', '1985-05-12'),
