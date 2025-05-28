@@ -90,24 +90,24 @@ CREATE TABLE licenza (
 
 DROP TABLE IF EXISTS casting_media_membro CASCADE;
 CREATE TABLE casting_media_membro (
-    id_media VARCHAR(25),
+    id_media_casting VARCHAR(25),
     codice_fiscale_membro CHAR(16),
     ruolo VARCHAR(63) NOT NULL,
     CHECK (ruolo IN ('Regista', 'Attore', 'Sceneggiatore', 'Produttore')),
-    PRIMARY KEY (codice_fiscale_membro, id_media),
-    FOREIGN KEY (id_media)              REFERENCES media(id_media),
+    PRIMARY KEY (codice_fiscale_membro, id_media_casting),
+    FOREIGN KEY (id_media_casting) REFERENCES media(id_media),
     FOREIGN KEY (codice_fiscale_membro) REFERENCES membro(codice_fiscale)
 );
 
 DROP TABLE IF EXISTS media_visti_utente CASCADE;
 CREATE TABLE media_visti_utente (
-    id_media VARCHAR(25),
+    id_media_visto VARCHAR(25),
     nome_utente VARCHAR(63),
     data_visione DATE NOT NULL,
     rating_utente FLOAT,
     CHECK (rating_utente >= 0 AND rating_utente <= 10),
-    PRIMARY KEY (id_media, nome_utente),
-    FOREIGN KEY (id_media)    REFERENCES media(id_media),
+    PRIMARY KEY (id_media_visto, nome_utente),
+    FOREIGN KEY (id_media_visto) REFERENCES media(id_media),
     FOREIGN KEY (nome_utente) REFERENCES utente(nome_utente)
 );
 
@@ -183,7 +183,9 @@ INSERT INTO membro (codice_fiscale, nome, cognome, nazionalita, data_nascita) VA
 ('MLRNCL90S10F205G', 'Nicole', 'Molari', 'Italiana', '1990-11-10'),
 ('GZZMRA89H19H501V', 'Maria', 'Guzzo', 'Italiana', '1989-06-19');
 
-INSERT INTO casting_media_membro(id_media,codice_fiscale_membro,ruolo) VALUES
+INSERT INTO casting_media_membro(id_media_casting,codice_fiscale_membro,ruolo) VALUES
+('AZI-20131122-CATCHIN13579','VLNTDR81D22F205Y', 'Regista'),
+('THR-20230108-PARADOS66778','VLNTDR81D22F205Y', 'Attore'),
 ('FAN-20100716-INCEPTI12345','RSSMRA85M12H501Z','Regista'),
 ('FAN-20100716-INCEPTI12345','VRDPLC80C22F205Z','Attore'),
 ('FAN-20100716-INCEPTI12345','BNCGNN90A01H501T','Attore'),
@@ -214,22 +216,23 @@ INSERT INTO utente (nome_utente, password_utente, email, data_registrazione) VAL
 ('laura.gal', 'LauraGal2022', 'laura.galli@email.it', '2023-01-20'),
 ('simone_drm', 'SimoneDRM5', 'simone.drm@email.it', '2023-02-25');
 
-INSERT INTO media_visti_utente(id_media,nome_utente,data_visione,rating_utente) VALUES
-('FAN-20100716-INCEPTI12345','giulia_rossi','2023-04-01',9),
-('FAN-20100716-INCEPTI12345','alessandro.v','2023-07-01',4),
-('COM-20140328-THEGRAN67890','alessandro.v','2023-05-15',7),
-('AZI-20120323-HUNGERG24680','chiara.bell','2023-06-10',5),
-('AZI-20131122-CATCHIN13579','marco.n91','2023-06-12',6),
-('FAN-20011219-ILSIGNO11223','francesca.c88','2023-07-20',10),
-('FAN-20021218-LEDUETT33445','dario.lux','2023-08-01',4),
-('FAN-20031217-ILRITON55667','elena_r87','2023-09-10',8),
-('THR-20220101-OROLOGI77889','federico.p77','2023-10-05',7),
-('THR-20220108-FRATTUR99001','laura.gal','2023-11-01',6),
-('THR-20220115-ANELLOC22334','simone_drm','2023-11-20',5),
-('THR-20230101-LABUSSO44556','giulia_rossi','2024-01-01',8),
-('FAN-20021218-LEDUETT33445','chiara.bell','2023-09-01',6),
-('THR-20230108-PARADOS66778','alessandro.v','2024-01-15',9),
-('THR-20230115-FINEINI88990','chiara.bell','2024-02-01',10);
+INSERT INTO media_visti_utente(id_media_visto,nome_utente,data_visione,rating_utente) VALUES
+('FAN-20100716-INCEPTI12345','giulia_rossi','2023-04-01',9.5),
+('FAN-20100716-INCEPTI12345','alessandro.v','2023-07-01',4.5),
+('COM-20140328-THEGRAN67890','alessandro.v','2023-05-15',7.0),
+('AZI-20120323-HUNGERG24680','chiara.bell','2023-06-10',5.5),
+('AZI-20131122-CATCHIN13579','marco.n91','2023-06-12',6.5),
+('FAN-20011219-ILSIGNO11223','francesca.c88','2023-07-20',10.0),
+('FAN-20021218-LEDUETT33445','dario.lux','2023-08-01',4.0),
+('FAN-20031217-ILRITON55667','elena_r87','2023-09-10',8.5),
+('THR-20220101-OROLOGI77889','federico.p77','2023-10-05',7.0),
+('THR-20220108-FRATTUR99001','laura.gal','2023-11-01',6.0),
+('THR-20220115-ANELLOC22334','simone_drm','2023-11-20',5.0),
+('THR-20230101-LABUSSO44556','giulia_rossi','2024-01-01',8.0),
+('FAN-20021218-LEDUETT33445','chiara.bell','2023-09-01',6.5),
+('THR-20230108-PARADOS66778','alessandro.v','2024-01-15',9.5),
+('FAN-20031217-ILRITON55667','chiara.bell','2024-02-01',9.5),
+('THR-20230115-FINEINI88990','chiara.bell','2024-02-01',10.0);
 
 INSERT INTO licenza(id_licensed_media,tipo,data_inizio,data_fine) VALUES
 ('FAN-20100716-INCEPTI12345','Subscription','2023-01-01','2026-01-01'),
@@ -245,3 +248,63 @@ INSERT INTO licenza(id_licensed_media,tipo,data_inizio,data_fine) VALUES
 ('THR-20230101-LABUSSO44556','Educational','2024-04-01',NULL),
 ('THR-20230108-PARADOS66778','Subscription','2024-05-01','2027-05-01'),
 ('THR-20230115-FINEINI88990','Sublicense','2024-06-01','2025-06-01');
+
+-- Trova l'utente/gli utenti che ha/hanno visto più film
+SELECT nome_utente, numero
+FROM (
+    SELECT nome_utente, COUNT(*) AS numero
+    FROM media_visti_utente
+    GROUP BY nome_utente
+) AS sub
+WHERE numero = (
+    SELECT MAX(numero)
+    FROM (
+        SELECT COUNT(*) AS numero
+        FROM media_visti_utente
+        GROUP BY nome_utente
+    ) AS counts
+);
+
+-- Dato il rating restituisce le serie tv con valutazione maggiore o uguale (parametrica)
+SELECT *
+FROM (
+    SELECT nome_serie_tv AS serie_tv, AVG(rating_imdb) AS media_rating_episodi
+    FROM episodio
+    INNER JOIN serie_tv ON episodio.nome_serie_tv = serie_tv.nome
+    INNER JOIN media ON media.id_media = episodio.id_episodio
+    GROUP BY nome_serie_tv
+) AS tabella
+WHERE media_rating_episodi >= 7.5;
+
+-- Dato un numero di incassi restituisce i film con introiti maggiori o uguali (parametrica)
+SELECT titolo, incassi
+FROM media
+INNER JOIN film ON media.id_media = film.id_film
+WHERE incassi >= 500000000;
+
+-- Dato un numero di episodi restituisce le serie tv almeno quel numero episodi (parametrica)
+SELECT nome_serie_tv, COUNT(id_episodio) AS numero_episodi
+FROM episodio
+INNER JOIN serie_tv ON episodio.nome_serie_tv = serie_tv.nome
+INNER JOIN media ON media.id_media = episodio.id_episodio
+GROUP BY nome_serie_tv
+HAVING COUNT(id_episodio) >= 3;
+
+-- Trova tutti gli episodi di serie tv e film dove ha partecipato Dario Valenti
+SELECT media.titolo, casting_media_membro.ruolo, serie_tv.nome AS nome_serie_tv
+FROM membro
+INNER JOIN casting_media_membro ON membro.codice_fiscale = casting_media_membro.codice_fiscale_membro
+INNER JOIN media ON media.id_media = casting_media_membro.id_media_casting
+LEFT JOIN episodio ON media.id_media = episodio.id_episodio
+LEFT JOIN serie_tv ON episodio.nome_serie_tv = serie_tv.nome
+WHERE membro.codice_fiscale = 'VLNTDR81D22F205Y';
+
+-- Mostra tutti i media che hanno un rating medio sulla piattaforma più alta del raing su imdb
+SELECT m.titolo AS titolo_media,s.nome AS titolo_serie_tv,
+    AVG(mvu.rating_utente) AS media_voti_utenti, m.rating_imdb
+FROM media m
+JOIN media_visti_utente mvu ON m.id_media = mvu.id_media_visto
+LEFT JOIN episodio e ON m.id_media = e.id_episodio
+LEFT JOIN serie_tv s ON e.nome_serie_tv = s.nome
+GROUP BY m.id_media, m.titolo, s.nome, m.rating_imdb
+HAVING AVG(mvu.rating_utente) > m.rating_imdb;
