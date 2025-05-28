@@ -1,6 +1,6 @@
 -- QUESTE SONO DA METTERE INSIEME ALL'ALTRO FILE, LE HO MESSE QUI SOLO PER QUESTIONE DI ORGANIZZAZIONE MOMENTANEA
 
--- Trova l'utente/gli utenti che ha/hanno visto più film
+-- Trova l'utente/gli utenti che ha/hanno visto più media
 SELECT nome_utente, numero
 FROM (
     SELECT nome_utente, COUNT(*) AS numero

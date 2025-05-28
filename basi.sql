@@ -295,7 +295,7 @@ INSERT INTO licenza(id_licensed_media,tipo,data_inizio,data_fine) VALUES
 
 -- Query
 
--- Trova l'utente/gli utenti che ha/hanno visto più film
+-- Trova l'utente/gli utenti che ha/hanno visto più media
 SELECT nome_utente, numero
 FROM (
     SELECT nome_utente, COUNT(*) AS numero

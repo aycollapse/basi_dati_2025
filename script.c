@@ -212,7 +212,7 @@ void print_menu()
     printf("** Opzioni **\n");
     printf("*************\n");
     printf("0) Esci\n");
-    printf("1) Trova l'utente/gli utenti che ha/hanno visto più film\n");
+    printf("1) Trova l'utente/gli utenti che ha/hanno visto più media\n");
     printf("2) Dato il rating restituisce le serie tv con valutazione maggiore o uguale (parametrica)\n");
     printf("3) Dato un numero di incassi restituisce i film con introiti maggiori o uguali (parametrica)\n");
     printf("4) Dato un numero di episodi restituisce le serie tv almeno quel numero episodi (parametrica)\n");
