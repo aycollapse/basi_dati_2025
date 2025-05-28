@@ -204,11 +204,11 @@ Allo scopo di simulare un’interfacciamento di base con il database dal punto d
 
 Lo script permette all’utente di interagire con le query elencate nel punto [5.2](https://www.notion.so/Relazione-Basi-Dati-2025-200f465ad20d809bb6b6cdff38ea6593?pvs=21), permettendo di inserire i parametri qualora queste fossero parametriche.
 
-![Schermata iniziale dello script](Relazione%20Basi%20Dati%202025%20200f465ad20d809bb6b6cdff38ea6593/image.png)
+![Schermata iniziale dello script](screenshots/image_menu.png)
 
 Schermata iniziale dello script
 
-![Output dopo aver eseguito la query 6](Relazione%20Basi%20Dati%202025%20200f465ad20d809bb6b6cdff38ea6593/image%201.png)
+![Output dopo aver eseguito la query 6](screenshots/image_query.png)
 
 Output dopo aver eseguito la query 6
 
