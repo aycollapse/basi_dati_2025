@@ -111,13 +111,31 @@ CREATE TABLE media_visti_utente (
     FOREIGN KEY (nome_utente) REFERENCES utente(nome_utente)
 );
 
+-- Indici
+
+CREATE INDEX idx_episodio_nome_serie_tv ON episodio(nome_serie_tv);
+
+CREATE INDEX idx_film_nome_saga ON film(nome_saga);
+
+-- Insert
+
 INSERT INTO saga (nome, descrizione, stato_completamento) VALUES
 ('Hunger Games', 'Una saga distopica basata sulla serie di romanzi di Suzanne Collins.', 'Completata'),
 ('Il Signore degli Anelli', 'Un epico fantasy basato sul romanzo di J.R.R. Tolkien.', 'Completata');
 
 INSERT INTO serie_tv (nome, descrizione, numero_stagioni, stato_completamento, incassi, premi_emmy) VALUES
 ('Chronos', 'Un thriller psicologico ambientato nel tempo.', 2, 'In corso', 1000000, 0),
-('Suits', 'Harvey Specter è uno dei più importanti avvocati di New York, cinico e spietato, con una passione per gli abiti sartoriali e la vita mondana. È appena diventato socio Senior dello studio legale presso cui lavora, Pearson Hardman, ruolo che lo obbliga, suo malgrado, ad assumere un giovane associato: Harvey odia dover lavorare in coppia, e odia ancor di più i neolaureati appena usciti da Harvard (la Pearson Hardman accetta esclusivamente coloro che si sono laureati ad Harvard). Mike Ross è invece un giovane ragazzo estremamente intelligente, dotato di una prodigiosa memoria eidetica, che non si è mai laureato in legge, anche se ha sfruttato le sue capacità per sostenere esami al posto di altri studenti illegalmente. Un incontro fortuito tra i due, con Mike che ha modo di mostrare tutta la sua competenza e inventiva in materia di legge, convince Harvey ad assumerlo nel suo studio, nascondendo a tutti il fatto che il giovane, in realtà, pur avendo superato l esame di ammissione all Albo (negli USA non esiste il valore legale del titolo di studio) non era in possesso dei requisiti minimi previsti dallo stato di New York per essere ammesso all esame (28 crediti presso una Law School e 4 anni di lavoro presso uno studio legale); da parte sua, Mike coglie al volo questa seconda occasione capitatagli inaspettatamente tra le mani, incominciando a districarsi in un ambiente altamente competitivo e cercando di dimostrare di essere all altezza, per questo posto di lavoro. ', 9, 'Terminata', 50000000, 0);
+('Suits', 'Harvey Specter è uno dei più importanti avvocati di New York, cinico e spietato, con una passione per' || --la trama era stra lunga quindi l'ho spezzata cosi
+'gli abiti sartoriali e la vita mondana. È appena diventato socio Senior dello studio legale presso cui lavora,'||
+'Pearson Hardman, ruolo che lo obbliga, suo malgrado, ad assumere un giovane associato: Harvey odia dover lavorare in coppia, '||
+'e odia ancor di più i neolaureati appena usciti da Harvard (la Pearson Hardman accetta esclusivamente coloro che si sono laureati ad Harvard).'||
+'Mike Ross è invece un giovane ragazzo estremamente intelligente, dotato di una prodigiosa memoria eidetica, che non si è mai laureato in legge, '||
+'anche se ha sfruttato le sue capacità per sostenere esami al posto di altri studenti illegalmente. Un incontro fortuito tra i due, con Mike che ha '||
+'modo di mostrare tutta la sua competenza e inventiva in materia di legge, convince Harvey ad assumerlo nel suo studio, nascondendo a tutti il fatto che '||
+'il giovane, in realtà, pur avendo superato l esame di ammissione all Albo (negli USA non esiste il valore legale del titolo di studio) non era in '||
+'possesso dei requisiti minimi previsti dallo stato di New York per essere ammesso all esame (28 crediti presso una Law School e 4 anni di '||
+'lavoro presso uno studio legale); da parte sua, Mike coglie al volo questa seconda occasione capitatagli inaspettatamente tra le mani, '||
+'incominciando a districarsi in un ambiente altamente competitivo e cercando di dimostrare di essere all altezza, per questo posto di lavoro. ', 9, 'Terminata', 50000000, 0);
 
 INSERT INTO media (id_media, titolo, genere, durata_minuti, trama, data_rilascio, rating_imdb) VALUES
 ('FAN-20100716-INCEPTI12345','Inception','Fantascienza',148,'Un ladro entra nei sogni per rubare segreti.','2010-07-16',8.8),
@@ -275,6 +293,8 @@ INSERT INTO licenza(id_licensed_media,tipo,data_inizio,data_fine) VALUES
 ('THR-20230108-PARADOS66778','Subscription','2024-05-01','2027-05-01'),
 ('THR-20230115-FINEINI88990','Sublicense','2024-06-01','2025-06-01');
 
+-- Query
+
 -- Trova l'utente/gli utenti che ha/hanno visto più film
 SELECT nome_utente, numero
 FROM (
@@ -297,7 +317,7 @@ FROM (
     SELECT nome_serie_tv AS serie_tv, AVG(rating_imdb) AS media_rating_episodi
     FROM episodio
     INNER JOIN serie_tv ON episodio.nome_serie_tv = serie_tv.nome
-    INNER JOIN media ON media.id_media = episodio.id_episodio
+    INNER JOIN media ON media.id_media = episodio.id_episodio 
     GROUP BY nome_serie_tv
 ) AS tabella
 WHERE media_rating_episodi >= 7.5;
