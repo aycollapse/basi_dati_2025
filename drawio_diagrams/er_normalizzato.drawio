@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:138.0) Gecko/20100101 Firefox/138.0" version="27.0.6">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:139.0) Gecko/20100101 Firefox/139.0" version="27.1.0">
   <diagram name="Page-1" id="vE6Pk_aVm6t82n-wlcTE">
-    <mxGraphModel dx="925" dy="554" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1018" dy="609" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -165,8 +165,8 @@
         <mxCell id="9Uc9kh_EMYb7eTTgJk2r-54" value="incassi" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="423" y="971" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="9Uc9kh_EMYb7eTTgJk2r-55" value="premi_oscar" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="410" y="986" width="60" height="30" as="geometry" />
+        <mxCell id="9Uc9kh_EMYb7eTTgJk2r-55" value="premi_emmy" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="408" y="986" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="9Uc9kh_EMYb7eTTgJk2r-56" value="incassi" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="100" y="695" width="60" height="30" as="geometry" />
