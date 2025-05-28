@@ -29,7 +29,7 @@
 void exit_db(PGconn *conn);
 void print_menu();
 void clear_screen();
-void print_cell(const char *str);
+void print_cella(const char *str);
 void checkerr_prepare(PGresult *res, PGconn *conn);
 void checkerr_result(PGresult *res, PGconn *conn);
 
@@ -89,7 +89,7 @@ int main()
                           "HAVING AVG(mvu.rating_utente) > m.rating_imdb";
     checkerr_prepare(PQprepare(conn, "confronto_rating", query_6, 1, NULL), conn);
 
-    int scelta_query;
+    int scelta_utente;
     int num_tuple;
     int num_attr;
 
@@ -98,10 +98,10 @@ int main()
         clear_screen();
         print_menu();
         printf("\nSeleziona query da eseguire: ");
-        scanf("%d", &scelta_query);
+        scanf("%d", &scelta_utente);
         while (getchar() != '\n');
 
-        switch (scelta_query) {
+        switch (scelta_utente) {
             case 0:
                 printf("Esci\n");
                 exit_db(conn);
@@ -172,7 +172,7 @@ int main()
         for (int i = 0; i < num_tuple; i++) {
             for (int j = 0; j < num_attr; j++) {
                 printf("| ");
-                print_cell(PQgetvalue(res, i, j));
+                print_cella(PQgetvalue(res, i, j));
             } 
         printf("|\n");
         }
@@ -217,12 +217,12 @@ void print_menu()
     printf("3) Dato un numero di incassi restituisce i film con introiti maggiori o uguali (parametrica)\n");
     printf("4) Dato un numero di episodi restituisce le serie tv almeno quel numero episodi (parametrica)\n");
     printf("5) Trova tutti gli episodi di serie tv e film dove ha partecipato Dario Valenti\n");
-    printf("6) Mostra tutti i media che hanno un rating medio sulla piattaforma più alta del raing su imdb\n");
+    printf("6) Mostra tutti i media che hanno un rating medio sulla piattaforma più alto del raing su imdb\n");
 }
 
 //questa funzione serve a troncare i valori che eccedono lo spazio definito in TAB per una singola cella
 //succedeva per esempio che stampando il titolo di un film del signore degli anelli la tabella venisse stampata male
-void print_cell(const char *str) {
+void print_cella(const char *str) {
     int len = strlen(str);
     if (len > TAB - 3) {
         for (int i = 0; i < TAB - 6; i++) {
