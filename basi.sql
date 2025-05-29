@@ -111,11 +111,9 @@ CREATE TABLE media_visti_utente (
     FOREIGN KEY (nome_utente) REFERENCES utente(nome_utente)
 );
 
--- Indici
+-- Indice
 
 CREATE INDEX idx_episodio_nome_serie_tv ON episodio(nome_serie_tv);
-
-CREATE INDEX idx_film_nome_saga ON film(nome_saga);
 
 -- Insert
 

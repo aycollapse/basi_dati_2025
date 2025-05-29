@@ -17,16 +17,19 @@ L'implementazione utilizza PostgreSQL, comprende script per il popolamento inizi
 
 ## 2 Analisi dei Requisiti
 
-- **Utente**: può registrarsi, effettuare login, visualizzare il catalogo, filtrare per genere, consultare dettagli e lasciare valutazioni e segnare i media che ha visto
-1. **Gestione Media**
+1. **Utente**
+    - può registrarsi, effettuare login, visualizzare il catalogo, filtrare per genere, consultare dettagli e lasciare valutazioni e segnare i media che ha visto
+2. **Gestione media**
     - Inserimento, modifica e cancellazione di film e serie TV.
     - Per le serie TV, gestione di stagioni ed episodi.
-2. **Gestione Saghe e Serie Tv**
-    - Definizione di saghe e associazione dei film ad esse. Analoga l’associazione tra episodi e serie tv
-3. **Gestione Licenze**
+3. **Gestione Saghe**
+    - Definizione di saghe e associazione dei film ad esse.
+4. **Gestione Serie TV**
+    - Definizione di serie tv e associazione degli episodi
+5. **Gestione Licenze**
     - I media possono avere o meno una licenza, le licenze presenti nel database devono avere per forza un media a cui sono assegnate.
     - I valori possibili da assegnare alle licenze sono specificati nella creazione della tabella `licenza`
-4. **Gestione Membri del Cast**
+6. **Gestione Membri del Cast**
     - Memorizzazione di registi, attori, sceneggiatori e produttori, con i loro dati anagrafici e le relazioni con i media.
     - I possibili ruoli che un membro può avere sono specificati nella tabella `casting_media_membro` che gestisce la relazione tra i membri ed il media
 
@@ -36,7 +39,7 @@ L'implementazione utilizza PostgreSQL, comprende script per il popolamento inizi
 
 Il modello Entità-Relazione individuato comprende le seguenti entità principali:
 
-- **Media** (film o episodio), con attributi: *ID*, *Titolo*, *Genere*, *Data rilascio*, *Durata*, *Trama*, *Rating IMDB*.
+- **Media** (film o episodio), con attributi: *ID*, *Titolo*, *Genere*, *Data rilascio*, *Durata in minuti*, *Trama*, *Rating IMDB*.
 - **Saga**, con *Nome* e *Descrizione*.
 - **Serie_TV**, con *Nome*, *Numero stagioni*, *Stato completamento*, *Incassi*, *Premi Emmy*.
 - **Film** e **Episodio**, specializzazioni di **Media**, collegate tramite foreign key.
@@ -76,16 +79,25 @@ Figura 2: Diagramma E-R con generalizzazione su media normalizzata
 
 ### 4.3 Schema Relazionale
 
-- media: (id_media PK, titolo, genere, durata, trama, data_uscita, rating_imdb)
-- saga: (nome PK, descrizione, stato)
-- serie_tv: (nome PK, descrizione, numero_stagioni, stato, incassi, premi_emmy)
-- film: (id_film PK, data_streaming, incassi, premi_oscar, saga_fk)
-- episodio: (id_episodio PK, stagione, numero, serie_tv_fk)
+- media: (id_media PK, titolo, genere, durata_minuti, trama, data_uscita, rating_imdb)
+- saga: (nome PK, descrizione, stato_completamento)
+- serie_tv: (nome PK, descrizione, numero_stagioni, stato_completamento, incassi, premi_emmy)
+- film: (id_film PK FK, data_uscita_streaming, incassi, premi_oscar, nome_saga FK)
+    - id_film references media.id_media
+    - nome_saga references saga.nome
+- episodio: (id_episodio PK FK, stagione, numero, nome_serie_tv FK)
+    - id_episodio references media.id_media
+    - nome_serie_tv references serie_tv.nome
 - membro: (codice_fiscale PK, nome, cognome, nazionalità, data_nascita)
-- utente: (username PK, password, email, data_iscrizione)
-- licenza: (media_fk PK, tipo, data_inizio, data_fine)
-- casting_media_membro: (media_fk PK, membro_fk PK, ruolo)
-- media_visti_utente: (media_fk PK, username_fk PK, data_visione, valutazione)
+- utente: (nome_utente PK, password_utente, email, data_registrazione)
+- licenza: (id_licensed_media PK FK, tipo, data_inizio, data_fine)
+    - id_licensed_media references media.id_media
+- casting_media_membro: (id_media_casting PK FK, codice_fiscale_membro PK FK, ruolo)
+    - id_media_casting references media.id_media
+    - codice_fiscale_membro references membro.codice_fiscale
+- media_visti_utente: (id_media_visto PK FK, nome_utente PK FK, data_visione, rating_utente)
+    - id_media_visto references media.id_media
+    - nome_utente references utente.nome_utente
 
 Le relazioni tra queste entità si possono visualizzare meglio nella *Figura 3* sottostante.
 
@@ -99,7 +111,7 @@ Nel file `basi.sql` sono inclusi gli script di creazione tabelle, popolamento da
 
 ### 5.1 Definizione delle Query
 
-**Trova l'utente/gli utenti che ha/hanno visto più film** 
+**Trova l'utente/gli utenti che ha/hanno visto più media** 
 
 ```jsx
 SELECT nome_utente, numero
@@ -192,11 +204,9 @@ Gli indici più appropriati per questo progetto a nostro avviso erano i seguenti
 ```jsx
 
 CREATE INDEX idx_episodio_nome_serie_tv ON episodio(nome_serie_tv);
-
-CREATE INDEX idx_film_nome_saga ON film(nome_saga);
 ```
 
-L’indice è stato scelto su `nome_serie_tv` perché questa colonna verrà probabilmente usata frequentemente per effettuare join o filtrare gli episodi relativi a una determinata serie TV (ad esempio, per visualizzare tutti gli episodi di "Suits" o "Chronos"). Aggiungendo un indice su questo campo si migliora significativamente la velocità delle query che lo utilizzano nei `WHERE`, `JOIN`, o `GROUP BY`. L’indice riduce il costo di accesso alle righe della tabella, specialmente in dataset di grandi dimensioni. La motivazione è analoga per `nome_saga` in quanto si potrebbe voler avere la lista di tutti i film di una saga, come ad esempio “Harry Potter” o “Il Signore degli Anelli” da mostrare all’utente o da dare in pasto ad altre query più complesse ed è un’operazione che può risultare costosa se fatta molte volte.
+L’indice è stato scelto su `nome_serie_tv` perché questa colonna verrà probabilmente usata frequentemente per effettuare join o filtrare gli episodi relativi a una determinata serie TV (ad esempio, per visualizzare tutti gli episodi di "Suits" o "Chronos"). Aggiungendo un indice su questo campo si migliora significativamente la velocità delle query che lo utilizzano nei `WHERE`, `JOIN`, o `GROUP BY`. L’indice riduce il costo di accesso alle righe della tabella, specialmente in dataset di grandi dimensioni. 
 
 ## 6 Interfaccia Applicativa in C
 
@@ -204,11 +214,11 @@ Allo scopo di simulare un’interfacciamento di base con il database dal punto d
 
 Lo script permette all’utente di interagire con le query elencate nel punto [5.2](https://www.notion.so/Relazione-Basi-Dati-2025-200f465ad20d809bb6b6cdff38ea6593?pvs=21), permettendo di inserire i parametri qualora queste fossero parametriche.
 
-![Schermata iniziale dello script](screenshots/image_menu.png)
+![Schermata iniziale dello script](image.png)
 
 Schermata iniziale dello script
 
-![Output dopo aver eseguito la query 6](screenshots/image_query.png)
+![Output dopo aver eseguito la query 6](image%201.png)
 
 Output dopo aver eseguito la query 6
 
